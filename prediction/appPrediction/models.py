@@ -12,5 +12,8 @@ class Travailleur(models.Model):
     age = models.IntegerField(validators=[MinValueValidator(18), MaxValueValidator(99)])
     experience = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(50)])
 
-class NombreDeLigne(models.model):
+class NombreDeLigne(models.Model):
     nombre = models.IntegerField()
+
+class scoreModel(models.Model):
+    scorePrecedant = models.IntegerField(default=0)

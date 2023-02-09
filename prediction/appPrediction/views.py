@@ -28,11 +28,14 @@ import plotly.express as px
 # url > views > model > template
 
 # Si la table NombreDeLigne est vide on ajoute un nombre de ligne égale à 0
-if len(NombreDeLigne) == 0:
-    tableNDL = NombreDeLigne(nombre = 0)
+if len(NombreDeLigne.objects.all()) == 0:
+    # On crée un enregistrement dans la table NombreDeLigne
+    tableNDL = NombreDeLigne(nombre = 0) 
     tableNDL.save()
 else:
     pass
+
+print("VALEURs de la colonne salaire", [ligne.salaire for ligne in Travailleur.objects.all()])
 
 def index(request):
     prix = int()
