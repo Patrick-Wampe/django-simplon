@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from appPrediction.models import Travailleur, NombreDeLigne
+from appPrediction.models import Travailleur, NombreDeLigne, scoreModel
 from appPrediction.forms import TravailleurForm
 from appPrediction.modelisation import prediction
+from authentification.models import User
+from django.contrib.auth.decorators import login_required
 
 from plotly.offline import plot
 import plotly.express as px
@@ -28,15 +30,31 @@ import plotly.express as px
 # url > views > model > template
 
 # Si la table NombreDeLigne est vide on ajoute un nombre de ligne égale à 0
-if len(NombreDeLigne.objects.all()) == 0:
-    # On crée un enregistrement dans la table NombreDeLigne
-    tableNDL = NombreDeLigne(nombre = 0) 
-    tableNDL.save()
-else:
+try:
+    if len(NombreDeLigne.objects.all()) == 0:
+        # On crée un enregistrement dans la table NombreDeLigne
+        tableNDL = NombreDeLigne(nombre = 0) 
+        tableNDL.save()
+    else:
+        pass
+
+    if len(scoreModel.objects.all()) == 0:
+        # On crée un enregistrement dans la table scoreModel
+        scoreModelPrecedant = scoreModel(scorePrecedant = 0) 
+        scoreModelPrecedant.save()
+    else:
+        pass
+except:
     pass
 
-print("VALEURs de la colonne salaire", [ligne.salaire for ligne in Travailleur.objects.all()])
+#print("VALEURs de la colonne salaire", [ligne.salaire for ligne in Travailleur.objects.all()])
 
+print("RESULTAT",User)
+
+
+
+
+@login_required
 def index(request):
     prix = int()
     form = TravailleurForm()
@@ -70,7 +88,7 @@ def index(request):
             #prix = regressionLineaire.predict([[ligneDansTableTravailleur.salaire]])[0][0]
 
             prix = prediction(ligneDansTableTravailleur.salaire)
-            return render(request, "index.html", {"prix" : prix})
+            return render(request, "index.html", {"prix" : prix, "graphique" : graphique})
         #return redirect('burger')
         except:
             ligneDansTableTravailleur = "La ligne n'existe pas"
@@ -88,7 +106,7 @@ def index(request):
         context={"a" : prenom, 'd' : datas, 'form' : form,
         "graphique" : graphique})
 
-
+@login_required
 def maj(request, id):
     ligneDansDatabase = Travailleur.objects.get(id = id)
     if request.method == "POST": # Quelqu'un a appuyé sur le bouton submit
@@ -107,10 +125,12 @@ def maj(request, id):
         return render(request, "maj.html", 
         {"ligneDansDatabase" : ligneDansDatabase})
 
+@login_required
 def sup(request, id):
     ligneDansDatabase = Travailleur.objects.get(id = id)
     ligneDansDatabase.delete()
     return redirect('index')
 
+@login_required
 def burger(request):
     return render(request, "burger.html")

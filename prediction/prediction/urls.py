@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from appPrediction.views import index, maj, sup, burger
+from authentification.views import connexion, deconnexion
 
 # url > views > model > template
 
@@ -25,4 +26,6 @@ urlpatterns = [
     path("maj/<int:id>", maj, name="maj"),
     path("sup/<int:id>", sup, name="sup"),
     path("burger", burger, name="burger"),
+    path("connexion", connexion, name="connexion"),
+    path("deconnexion", deconnexion, name="deconnexion"),
 ]
