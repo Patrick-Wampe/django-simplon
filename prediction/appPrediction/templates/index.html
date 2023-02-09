@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'style.css' %}" >
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Ma page web</title>
+    </head>
+    <body>
+        <h1 class="titre" id="titre">Welcome {{ d.1.prenom }}</h1>
+        <!--
+        <h3>Formulaire Django Forms</h3>
+        <form action="" method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Envoyer">
+        </form>
+        -->
+        <h4 class="text-center">Indique la taille de ton appartement et je te dirais combien tu peux le vendre ;-)</h4>
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <input type="number" name="IDUser" required>
+            <input type="submit" class="btn btn-primary">
+        </form>
+        <h4>Ton appartement sera vendu au prix de : {{ prix }}</h4>
+
+
+        <h4>
+            <a href="{% url 'burger' %}">Clique ici si tu as grave faim</a>
+        </h4>
+
+        <div>
+            <h4>Mon graphique</h4>
+            {% autoescape off %}
+                {{ graphique }}
+            {% endautoescape %}
+        </div>
+        <!--
+         <div class="row text-center">
+            <h3 class="titre" id="mot">Merci de renseigner le formulaire</h3>
+            <form method="post" class="col-sm-10 col-md-6">
+                {% csrf_token %}
+                <div>
+                    <label>Prenom</label><br>
+                    <input type="text" required name="Prenom">
+                </div>
+                <label>Nom</label><br>
+                <input type="text" required name="Nom"><br>
+
+                <label>Ville</label><br>
+                <input type="text" required name="Ville"><br>
+
+                <label>Competences</label><br>
+                <input type="text" required name="Competences"><br>
+
+                <label>Metier</label><br>
+                <input type="text" required name="Metier"><br>
+
+                <label>Salaire</label><br>
+                <input type="number" required name="Salaire"><br>
+
+                <label>Age</label><br>
+                <input type="number" required name="Age"><br>
+
+                <label>Experience</label><br>
+                <input type="number" required name="Experience"><br>
+
+                <input type="submit" class="btn btn-success">
+            </form>
+            <ul class="col-sm-2 col-md-6">
+                {% for element in d %}
+                <li>{{ element.prenom }} {{ element.nom }} {{ element.salaire }} : <a href="{% url 'maj' element.id %}" target="_blank">maj</a>  <a href="{% url 'sup' element.id %}" target="_blank">supprimer</a></li>
+                {% endfor %}
+            </ul>
+            <img src="{% static 'illusion.jpeg' %}" class="rounded-circle">
+         </div>
+        -->
+    </body>
+</html>

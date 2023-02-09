@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+    <link rel="stylesheet" href="{% static 'style.css' %}" >
+    <title>Ma page web</title>
+    </head>
+    <body>
+        <h1>Welcome {{ ligneDansDatabase.prenom }}</h1>
+        <h3>Merci de mettre à jour les données</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label>Prenom</label><br>
+                <input type="text" required name="Prenom" value="{{ ligneDansDatabase.prenom }}">
+            </div>
+            <label>Nom</label><br>
+            <input type="text" required name="Nom"  value="{{ ligneDansDatabase.nom }}"><br>
+
+            <label>Ville</label><br>
+            <input type="text" required name="Ville"  value="{{ ligneDansDatabase.ville }}"><br>
+
+            <label>Competences</label><br>
+            <input type="text" required name="Competences"  value="{{ ligneDansDatabase.competence }}"><br>
+
+            <label>Metier</label><br>
+            <input type="text" required name="Metier"  value="{{ ligneDansDatabase.metier }}"><br>
+
+            <label>Salaire</label><br>
+            <input type="number" required name="Salaire"  value="{{ ligneDansDatabase.salaire }}"><br>
+
+            <label>Age</label><br>
+            <input type="number" required name="Age"  value="{{ ligneDansDatabase.age }}"><br>
+
+            <label>Experience</label><br>
+            <input type="number" required name="Experience"  value="{{ ligneDansDatabase.experience }}"><br>
+
+            <input type="submit">
+        </form>
+    </body>
+</html>
