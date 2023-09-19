@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import redirect
+from authentification.models import Utilisateur
+import random 
+import string
 
 def connexion(request):
     message = ""
@@ -12,7 +15,7 @@ def connexion(request):
                                     password = motDePasse)
         if verification != None:
             login(request, verification)
-            redirect("accueil")
+            return redirect("accueil")
         else:
             message = "username ou/et mot de passe incorrect"
     
@@ -22,3 +25,17 @@ def connexion(request):
 def deconnexion(request):
     logout(request)
     return redirect("connexion")
+
+
+def inscription(request):
+    ideeMDP = "".join([random.choice(string.printable) for _ in range(12)]).replace(" ", "")
+    if request.method == "POST": 
+        username = request.POST["username"]
+        motDePasse = request.POST["motDePasse"]
+        nouveauCompte = Utilisateur.objects.create_user(username = username,
+                                    password = motDePasse)
+        
+        return redirect("connexion")
+    
+    return render(request,
+                      "inscription.html", {"ideeMDP" : ideeMDP.replace(" ", "")})
