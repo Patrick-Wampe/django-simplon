@@ -6,6 +6,7 @@
     <title>Connexion</title>
 </head>
 <body>
+    <h1>Connexion</h1>
     {{ message }}
     <form method="post">
         {% csrf_token %}
@@ -13,5 +14,8 @@
         <input type="password" name="motDePasse" required>
         <input type="submit">
     </form>
+    <p>Vous n'avez de compte ? Quel dommage ! Inscrivez sur le lien ci-dessous pour profiter de toutes les fonctionnalités</p>
+    <p><a href="{% url 'inscription' %}">M'inscrire</a></p>
+
 </body>
 </html>
