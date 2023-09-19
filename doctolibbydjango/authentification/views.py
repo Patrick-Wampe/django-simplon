@@ -4,14 +4,15 @@ from django.shortcuts import redirect
 
 def connexion(request):
     message = ""
-    if request.method == "POST":
+    # A t'on reçu des datas d'un formulaire ? Si oui la condition est True
+    if request.method == "POST": 
         username = request.POST["username"]
         motDePasse = request.POST["motDePasse"]
         verification = authenticate(username = username,
                                     password = motDePasse)
         if verification != None:
             login(request, verification)
-            pass # rediriger vers la page d'accueil
+            redirect("accueil")
         else:
             message = "username ou/et mot de passe incorrect"
     
