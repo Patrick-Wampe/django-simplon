@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+</head>
+<body>
+    <h1>Inscription</h1>
+    <p>Voici une idée de Mot de passe :<br>
+        {{ ideeMDP }}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" required>
+        <input type="password" name="motDePasse" required>
+        <input type="submit">
+    </form>
+    <p>Revenir à la page de connexion</p>
+    <p><a href="{% url 'connexion' %}">Connexion</a></p>
+</body>
+</html>
