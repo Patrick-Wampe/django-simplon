@@ -1,0 +1,20 @@
+<nav>
+    <ul>
+        <li>
+            <a href="">Accueil</a>
+        </li>
+        <li>Formulaires
+            <ul>
+                <li>
+                    <a href="">Formulaire de santé générale</a></li>
+                <li><a href="">Formulaire de niveau de stress</a></li>
+            </ul>
+        </li>
+        <li><a href="">Historique</a></li>
+        {% if user.role == "admin" %}
+            <li><a href="">EDA et IA</a></li>
+        {% endif %}
+        <li><a href="{% url 'comptes' %}">Comptes</a></li>
+        <li><a href="">Déconnexion</a></li>
+    </ul>
+</nav>
