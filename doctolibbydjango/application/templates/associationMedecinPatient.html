@@ -8,15 +8,15 @@
     {% csrf_token %}
 
     <label>Choisissez le médecin à associer :</label><br>
-    <select name="medecin" id="medecin">
+    <select name="medecin" id="medecin" required>
         <option value="">Choisissez un médecin</option>
-        {% for medecin in  medecinsID %}
+        {% for medecin in  medecins %}
         <option value={{ medecin }}>{{ medecin }}</option>
         {% endfor %}
     </select>
 
     <label>Choisissez le patient à associer :</label><br>
-    <select name="patient" id="patient">
+    <select name="patient" id="patient" required>
         <option value="">Choisissez un patient</option>
         {% for patient in  listePatientsNonAssocies %}
         <option value={{ patient }}>{{ patient }}</option>
@@ -37,8 +37,8 @@
     </tr>
     {% for ligne in tableAssociationMedecinPatient %}
     <tr>
-        <td>ligne.idMedecin</td>
-        <td>ligne.idPatient</td>
+        <td>{{ ligne.idMedecin }}</td>
+        <td>{{ ligne.idPatient }}</td>
     </tr>
     {% endfor %}
 </table>
