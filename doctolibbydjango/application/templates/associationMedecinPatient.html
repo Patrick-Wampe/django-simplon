@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<title>Association Medecin Patient</title>
+
+<h1>Bonjour {{prenom}} !</h1>
+<form method="post">
+    {% csrf_token %}
+
+    <label>Choisissez le médecin à associer :</label><br>
+    <select name="medecin" id="medecin">
+        <option value="">Choisissez un médecin</option>
+        {% for medecin in  medecinsID %}
+        <option value={{ medecin }}>{{ medecin }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Choisissez le patient à associer :</label><br>
+    <select name="patient" id="patient">
+        <option value="">Choisissez un patient</option>
+        {% for patient in  listePatientsNonAssocies %}
+        <option value={{ patient }}>{{ patient }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit">
+</form>
+
+<h2>Table d'association Medecin Patient</h2>
+<table>
+    <tr>
+        <th>
+            Medecin
+        </th>
+        <th>
+            Patient
+        </th>
+    </tr>
+    {% for ligne in tableAssociationMedecinPatient %}
+    <tr>
+        <td>ligne.idMedecin</td>
+        <td>ligne.idPatient</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
