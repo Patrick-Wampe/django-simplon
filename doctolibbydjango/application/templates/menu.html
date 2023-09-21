@@ -1,7 +1,7 @@
 <nav>
     <ul>
         <li>
-            <a href="">Accueil</a>
+            <a href="{% url 'accueil' %}">Accueil</a>
         </li>
         <li>Formulaires
             <ul>
@@ -11,10 +11,10 @@
             </ul>
         </li>
         <li><a href="">Historique</a></li>
-        {% if user.role == "admin" %}
-            <li><a href="">EDA et IA</a></li>
+        {% if user.role == "medecin" %}
+            <li><a href="{% url 'edaia' %}">EDA et IA</a></li>
         {% endif %}
         <li><a href="{% url 'comptes' %}">Comptes</a></li>
-        <li><a href="">Déconnexion</a></li>
+        <li><a href="{% url 'deconnexion' %}">Déconnexion</a></li>
     </ul>
 </nav>
