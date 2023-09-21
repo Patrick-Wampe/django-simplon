@@ -14,6 +14,7 @@
         {% if user.role == "medecin" %}
             <li><a href="{% url 'edaia' %}">EDA et IA</a></li>
         {% endif %}
+        <li><a href="{% url 'associationMedecinPatient' %}">Associé un médecin à un patient</a></li>
         <li><a href="{% url 'comptes' %}">Comptes</a></li>
         <li><a href="{% url 'deconnexion' %}">Déconnexion</a></li>
     </ul>
