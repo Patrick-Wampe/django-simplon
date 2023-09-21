@@ -12,7 +12,7 @@ def accueil(request):
 
 @login_required
 def comptes(request):
-    regexMDP = "^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[!@#$%^&*()_+-]).{8,}$"
+    regexMDP = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+-]).{8,}$"
     message = ""
     if request.method == "POST":
         ancienMDP = request.POST["ancienMDP"]
@@ -35,4 +35,11 @@ def comptes(request):
     return render(request,
                   "comptes.html",
                   {"regexMDP" : regexMDP, "message" : message})
+
+@login_required
+def edaia(request):
+    if request.user.role != "medecin":
+        return redirect("accueil")
+    else:
+        return render(request, "edaia.html")
 
