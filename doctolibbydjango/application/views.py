@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
-from authentification.models import Utilisateur
+from authentification.models import Utilisateur, medecinPatient
 
 @login_required
 def accueil(request):
@@ -39,7 +39,38 @@ def comptes(request):
 @login_required
 def edaia(request):
     if request.user.role != "medecin":
-        return redirect("accueil")
+        return redirect("https://media.tenor.com/2euSOQYdz8oAAAAj/this-was-technically-illegal-maclen-stanley.gif")
     else:
         return render(request, "edaia.html")
+
+
+@login_required
+def associationMedecinPatient(request):
+    # 1- Récupérer la liste des id des médecins et des patients
+    # 2- Ensuite on ne garde que les patients qui ne sont pas dans la table medecinPatient
+    # 3- On créé ensuite un template qui contiendra une liste déroulante
+    # 4- Dans cette liste déroulante on va afficher d'un côté les médecins
+    # et de l'autre les patients filtrés (voir étapge 2)
+    # https://developer.mozilla.org/fr/docs/Web/HTML/Element/select
+    medecinsID = [medecin.id for medecin in Utilisateur.objects.filter(role="medecin")]
+    patientsID = [patient.id for patient in Utilisateur.objects.filter(role="patient")]
+    listePatientsAssocies = [ligne.idPatient for ligne in medecinPatient.objects.all()]
+    listePatientsNonAssocies = [id for id in patientsID if id not in listePatientsAssocies]
+    tableAssociationMedecinPatient = medecinPatient.objects.all()
+    # Syntaxte équivalente
+    #for id in patientsID :
+    #    if id not in listePatientsAssocies:
+    #        patientsNonAssocies.append(id)
+    
+    if request.method == "POST":
+        medecin = request.POST["medecin"]
+        patient = request.POST["patient"]
+        medecinPatient(idMedecin = Utilisateur.objects.filter(id=medecin)[0], 
+                       idPatient = Utilisateur.objects.filter(id=patient)[0]).save()
+        #medecinPatient.save()
+    return render(request, "associationMedecinPatient.html",
+                  {"listePatientsNonAssocies" : listePatientsNonAssocies,
+                   "medecinsID" : medecinsID,
+                   "tableAssociationMedecinPatient" : tableAssociationMedecinPatient})
+
 
