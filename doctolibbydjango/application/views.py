@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from authentification.models import Utilisateur, medecinPatient
+from application.forms import FormulaireSanteForm #InfoGeneraleForm, EtatDeSanteForm #
+#from formtools.wizard.views import SessionWizardView
+import os
+from django.http import HttpResponse
+import datetime
 
 @login_required
 def accueil(request):
@@ -72,8 +77,36 @@ def associationMedecinPatient(request):
                    "tableAssociationMedecinPatient" : tableAssociationMedecinPatient})
 
 
+@login_required
+def formulaireSante(request):
+    if request.method == "POST":
+       formulaire = FormulaireSanteForm(request.POST)
+       if formulaire.is_valid():
+           sauvagarde = formulaire.save() 
+    else:
+        formulaire = FormulaireSanteForm()
+    return render(request,
+                  "formulaireSante.html",
+                  {"formulaire" : formulaire})
 
 
+#class ApplicationWizardView(SessionWizardView):
+#    form_list = [InfoGeneraleForm, EtatDeSanteForm]
+#    template_name = "formulaireSante.html"
+#    def done(self, form_list, **kwargs):
+#            return HttpResponse('Formulaire envoyé')
 
 
+       #form = form_list[0]
+       #if form.cleaned_data.get('patient'):    
+       #     form.save()
+       
+       # form = form_list
+        #for form in form_list:
+        #    print(form.cleaned_data.get('patient'))
+        #for form in form_list:
+        #    instance = form.save(commit=False)
+        #return HttpResponse("Formulaire soumis !")
+
+    
 
