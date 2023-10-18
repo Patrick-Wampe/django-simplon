@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<title>Formulaire Santé</title>
+
+<h1>Bienvenue dans le formulaire santé {{prenom}} !</h1>
+<form id="formContainer" method="post">
+    {% csrf_token %}
+    {{ formulaire.as_p }}
+    <button type="button" id="nextBtn">Suivant</button>
+    <button type="submit" id="submitBtn" style="display:none;">Envoyer</button>
+</form>
+
+<script>
+    // Initialisation et récupération des données stockées
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let formContainer = document.getElementById('formContainer');
+        let allFields = formContainer.querySelectorAll('p');
+        let fieldGroups = [];
+        let currentGroup = 0;
+
+        // Regrouper les champs par 3
+        //taille = document.getElementsByTagName("p").length;
+        //nombre = Math.trunc(taille/3);
+        //let cpt = 0;
+        //let fin = 3;
+       
+        for (let i = 0; i < allFields.length; i += 3) {
+            let fieldGroup = document.createElement('div');
+            fieldGroup.className = 'field-group';
+            fieldGroup.style.display = 'none';
+
+            for (let j = 0; j < 3; j++) {
+                if (i + j < allFields.length) {
+                    fieldGroup.appendChild(allFields[i + j]);
+                }
+            }
+            fieldGroups.push(fieldGroup);
+            formContainer.insertBefore(fieldGroup, document.getElementById("nextBtn"));
+        }
+
+        // Afficher le premier groupe
+        fieldGroups[currentGroup].style.display = 'block';
+
+        // Bouton Suivant
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            fieldGroups[currentGroup].style.display = 'none';
+            currentGroup++;
+
+            if (currentGroup < fieldGroups.length) {
+                fieldGroups[currentGroup].style.display = 'block';
+                if (currentGroup == fieldGroups.length-1)
+                {
+                    document.getElementById('nextBtn').style.display = 'none';
+                    document.getElementById('submitBtn').style.display = 'block';
+                }
+            } 
+        });
+    });
+</script>
+{% endblock %}
+
+
