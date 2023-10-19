@@ -42,4 +42,25 @@
     </tr>
     {% endfor %}
 </table>
+
+<h2>Table données Formulaire santé</h2>
+<table>
+    <tr>
+        {% for colonne in champsFormulaireSante %}
+        <th>
+            {{ colonne }}
+        </th>
+        {% endfor %}
+    </tr>
+    
+    {% for data in dataFormulaireSante %}
+    <tr>
+        {% for element in data %}
+            <th>
+            {{ element }}
+            </th>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
