@@ -44,15 +44,16 @@
 </table>
 
 <h2>Table données Formulaire santé</h2>
-<table>
-    <tr>
-        {% for colonne in champsFormulaireSante %}
-        <th>
-            {{ colonne }}
-        </th>
-        {% endfor %}
-    </tr>
-    
+<table id="example">
+    <thead>
+        <tr>
+            {% for colonne in champsFormulaireSante %}
+            <th>
+                {{ colonne }}
+            </th>
+            {% endfor %}
+        </tr>
+    </thead>
     {% for data in dataFormulaireSante %}
     <tr>
         {% for element in data %}
