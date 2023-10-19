@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from authentification.models import Utilisateur, medecinPatient
+from application.models import FormulaireSante
 from application.forms import FormulaireSanteForm #InfoGeneraleForm, EtatDeSanteForm #
 #from formtools.wizard.views import SessionWizardView
 import os
@@ -60,9 +61,22 @@ def associationMedecinPatient(request):
     medecins = [medecin for medecin in Utilisateur.objects.filter(role="medecin")]
     patients = [patient for patient in Utilisateur.objects.filter(role="patient")]
     listePatientsAssocies = [ligne.idPatient for ligne in medecinPatient.objects.all()]
-    print("listePatientsAssocies :", listePatientsAssocies)
+    #print("listePatientsAssocies :", listePatientsAssocies)
     listePatientsNonAssocies = [patient for patient in patients if patient not in listePatientsAssocies]
     tableAssociationMedecinPatient = medecinPatient.objects.all()
+    
+    # Je récupère les champs de la table formulaire santé
+    champsFormulaireSante = [field.name for field in FormulaireSante._meta.get_fields()]
+    # Je récupère les ids des lignes de la table formulaire santé
+    idDesFormulaires = [valeur.id for valeur in FormulaireSante.objects.all()]
+    # Je crée une liste qui contiendra les valeurs des lignes
+    # Il y a autant d'élément que de ligne, donc que d'ids récupéré
+    # FormulaireSante.objects.filter(id=id).values()[0].values()
+    # Dans le code ci-dessus je récupère la ligne ayant un certain id
+    # Ensuite je récupère les valeurs de la ligne .values
+    # Le 1er élément qui est le dictionnaire des colonnes/valeurs
+    # et enfin uniquement les valeurs
+    dataFormulaireSante = [FormulaireSante.objects.filter(id=id).values()[0].values() for id in idDesFormulaires]
     
     if request.method == "POST":
         medecin = request.POST["medecin"]
@@ -74,7 +88,9 @@ def associationMedecinPatient(request):
     return render(request, "associationMedecinPatient.html",
                   {"listePatientsNonAssocies" : listePatientsNonAssocies,
                    "medecins" : medecins,
-                   "tableAssociationMedecinPatient" : tableAssociationMedecinPatient})
+                   "tableAssociationMedecinPatient" : tableAssociationMedecinPatient,
+                   "dataFormulaireSante" : dataFormulaireSante,
+                   "champsFormulaireSante" : champsFormulaireSante})
 
 
 @login_required
