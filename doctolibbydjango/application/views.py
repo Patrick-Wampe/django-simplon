@@ -3,8 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from authentification.models import Utilisateur, medecinPatient
 from application.models import FormulaireSante
-from application.forms import FormulaireSanteForm #InfoGeneraleForm, EtatDeSanteForm #
-#from formtools.wizard.views import SessionWizardView
+from application.forms import FormulaireSanteForm 
 import os
 from django.http import HttpResponse
 import datetime
@@ -14,7 +13,6 @@ def accueil(request):
     prenom = request.user.username
     return render(request,"accueil.html",
                   context={"prenom": prenom})
-
 
 @login_required
 def comptes(request):
@@ -44,7 +42,7 @@ def comptes(request):
 
 @login_required
 def edaia(request):
-    if request.user.role != "medecin":
+    if request.user.role == "patient":
         return redirect("https://media.tenor.com/2euSOQYdz8oAAAAj/this-was-technically-illegal-maclen-stanley.gif")
     else:
         return render(request, "edaia.html")
@@ -76,12 +74,24 @@ def associationMedecinPatient(request):
     # Ensuite je récupère les valeurs de la ligne .values
     # Le 1er élément qui est le dictionnaire des colonnes/valeurs
     # et enfin uniquement les valeurs
-    dataFormulaireSante = [FormulaireSante.objects.filter(id=id).values()[0].values() for id in idDesFormulaires]
     
+    #dataFormulaireSante = [FormulaireSante.objects.filter(id=id).values()[0].values() for id in idDesFormulaires]
+    # On créé une liste des données du formulaires de santé général
+    dataFormulaireSante = []
+    # On boucle dans les lignes du formulairs > ligne 1, 2, 3...
+    for id in idDesFormulaires:
+        # On récupère sous forme de liste l'ensemble de la ligne ayant un id donnée
+        info = list(FormulaireSante.objects.filter(id=id).values()[0].values())
+        # On récupère l'username en nous basant sur la colonne de l'id dans la table du formulaire
+        # On écrase l'ensemble valeur parce qu'on veut pas l'ID mais le username
+        info[1] = Utilisateur.objects.filter(id=info[1])[0].username
+        # On ajoute la ligne complète dans la liste dataFormulaireSante
+        dataFormulaireSante.append(info)
+    #print(list(info))
     if request.method == "POST":
         medecin = request.POST["medecin"]
         patient = request.POST["patient"]
-        print("medecin", type(medecin), medecin)
+        #print("medecin", type(medecin), medecin)
         medecinPatient(idMedecin = Utilisateur.objects.filter(username=medecin)[0], 
                        idPatient = Utilisateur.objects.filter(username=patient)[0]).save()
         return redirect("associationMedecinPatient")
@@ -96,14 +106,17 @@ def associationMedecinPatient(request):
 @login_required
 def formulaireSante(request):
     if request.method == "POST":
-       formulaire = FormulaireSanteForm(request.POST)
-       if formulaire.is_valid():
-           sauvagarde = formulaire.save() 
+       #formulaire = FormulaireSanteForm(request.POST)
+       #if formulaire.is_valid():
+       #    sauvagarde = formulaire.save() 
+       # print(request.POST)
+       print(dict(request.POST).items())
     else:
-        formulaire = FormulaireSanteForm()
+        #formulaire = FormulaireSanteForm()
+        pass
     return render(request,
-                  "formulaireSante.html",
-                  {"formulaire" : formulaire})
+                  "formulaireSante.html")#,
+                  #{"formulaire" : formulaire})
 
 
 #class ApplicationWizardView(SessionWizardView):
